@@ -1,28 +1,28 @@
-# Игнорировать виртуальные окружения
+# Ignore virtual environments
 venv/
 .env.dev
 .env.test
 .env.prod
 
-# Игнорировать файлы IDE
+# Ignore IDE files
 .idea/
 
-# Игнорировать файлы миграций и конфигурации Alembic
+# Ignore Alembic migrations and configuration
 alembic.ini
 
-# Игнорировать кэш Python
+# Ignore Python cache
 __pycache__/
 *.pyc
 *.pyo
 *.pyd
 
-# Игнорировать логи
+# Ignore logs
 *.log
 logs/
 
-# Игнорировать временные файлы
+# Ignore temporary files
 *.tmp
 *.temp
 
-# Игнорировать файлы тестов
+# Ignore test files
 .pytest_cache/
