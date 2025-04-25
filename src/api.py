@@ -1,15 +1,13 @@
 import uuid
 
 import httpx
-from fastapi import APIRouter, HTTPException, status, Response
+from fastapi import APIRouter, HTTPException, Request, status
 from fastapi.responses import RedirectResponse
 from pydantic import HttpUrl
 
 from src.schemas import ShortUrlResponse
 
 router = APIRouter(tags=["api"])
-
-db = {}
 
 
 @router.post(
@@ -18,12 +16,15 @@ db = {}
     status_code=status.HTTP_201_CREATED,
     summary="Create short url",
 )
-async def create_short_url(url: HttpUrl):
-    for short_id, db_url in db.items():
-        if url == db_url:
-            return {"short_url": f"http://127.0.0.1:8080/{short_id}"}
-    short_id = str(uuid.uuid4())[:8]
-    db[short_id] = url
+async def create_short_url(url: HttpUrl, request: Request):
+    url = str(url)
+    redis_client = request.app.state.redis
+    short_id = await redis_client.get(url)
+
+    if short_id is None:
+        short_id = str(uuid.uuid4())[:8]
+        await redis_client.set(url, short_id)
+        await redis_client.set(short_id, url)
     return {"short_url": f"http://127.0.0.1:8080/{short_id}"}
 
 
@@ -32,10 +33,11 @@ async def create_short_url(url: HttpUrl):
     status_code=status.HTTP_307_TEMPORARY_REDIRECT,
     summary="Redirect to original",
 )
-async def redirect_to_original(short_id: str):
-    try:
-        original_url = db[short_id]
-    except KeyError:
+async def redirect_to_original(short_id: str, request: Request):
+    redis_client = request.app.state.redis
+    original_url = await redis_client.get(short_id)
+
+    if original_url is None:
         raise HTTPException(status_code=status.HTTP_404_NOT_FOUND)
 
     return RedirectResponse(original_url, status_code=307)
@@ -44,7 +46,7 @@ async def redirect_to_original(short_id: str):
 @router.get(
     "/cat-fact/",
     status_code=status.HTTP_200_OK,
-    summary="Get a fact about cats"
+    summary="Get a fact about cats",
 )
 async def get_cat_fact():
     async with httpx.AsyncClient() as client:
