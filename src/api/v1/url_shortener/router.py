@@ -1,13 +1,12 @@
 import uuid
 
-import httpx
 from fastapi import APIRouter, HTTPException, Request, status
 from fastapi.responses import RedirectResponse
 from pydantic import HttpUrl
 
-from src.schemas import ShortUrlResponse
+from src.api.v1.url_shortener.schemas import ShortUrlResponse
 
-router = APIRouter(tags=["api"])
+router = APIRouter()
 
 
 @router.post(
@@ -41,14 +40,3 @@ async def redirect_to_original(short_id: str, request: Request):
         raise HTTPException(status_code=status.HTTP_404_NOT_FOUND)
 
     return RedirectResponse(original_url, status_code=307)
-
-
-@router.get(
-    "/cat-fact/",
-    status_code=status.HTTP_200_OK,
-    summary="Get a fact about cats",
-)
-async def get_cat_fact():
-    async with httpx.AsyncClient() as client:
-        response = await client.get("https://catfact.ninja/fact")
-        return response.json()

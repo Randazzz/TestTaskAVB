@@ -6,7 +6,7 @@ from fastapi import FastAPI
 from redis import RedisError
 from redis import asyncio as redis
 
-from src.api import router
+from src.api.v1 import router as v1_router
 
 
 @asynccontextmanager
@@ -25,7 +25,7 @@ async def lifespan(_: FastAPI) -> AsyncIterator[None]:
 
 app = FastAPI(lifespan=lifespan)
 
-app.include_router(router)
+app.include_router(v1_router)
 
 
 if __name__ == "__main__":
