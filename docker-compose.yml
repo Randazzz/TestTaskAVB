@@ -3,15 +3,21 @@ services:
     build: .
     ports:
       - "8080:8080"
+    env_file:
+      - .env
     depends_on:
-      - redis
+      - db
 
-  redis:
-    image: redis:alpine
+  db:
+    image: postgres:latest
     ports:
-      - "6379:6379"
+      - "5433:5432"
+    environment:
+      POSTGRES_USER: ${DATABASE_USER}
+      POSTGRES_PASSWORD: ${DATABASE_PASSWORD}
+      POSTGRES_DB: ${DATABASE_NAME}
     volumes:
-      - redis_data:/data
+      - pgdata:/var/lib/postgresql/data
 
 volumes:
-  redis_data:
+  pgdata:

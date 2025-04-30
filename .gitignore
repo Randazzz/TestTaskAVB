@@ -1,6 +1,6 @@
 # Ignore virtual environments
 venv/
-.env.dev
+.env
 .env.test
 .env.prod
 
