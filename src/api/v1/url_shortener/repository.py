@@ -21,3 +21,11 @@ class URLShortenerRepository:
         if not shortened_url:
             return None
         return shortened_url
+
+    async def get_by_original_url_or_none(self, original_url):
+        stmt = select(ShortenedURL).filter(ShortenedURL.original_url == original_url)  # type: ignore
+        result = await self.db.execute(stmt)
+        shortened_url = result.scalars().first()
+        if not shortened_url:
+            return None
+        return shortened_url
