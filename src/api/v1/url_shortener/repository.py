@@ -14,7 +14,7 @@ class URLShortenerRepository:
         await self.db.refresh(shortened_url)
         return shortened_url
 
-    async def get_by_short_id_or_none(self, short_id):
+    async def get_by_short_id_or_none(self, short_id) -> ShortenedURL | None:
         stmt = select(ShortenedURL).filter(ShortenedURL.short_key == short_id)  # type: ignore
         result = await self.db.execute(stmt)
         shortened_url = result.scalars().first()
@@ -22,7 +22,7 @@ class URLShortenerRepository:
             return None
         return shortened_url
 
-    async def get_by_original_url_or_none(self, original_url):
+    async def get_by_original_url_or_none(self, original_url) -> ShortenedURL | None:
         stmt = select(ShortenedURL).filter(ShortenedURL.original_url == original_url)  # type: ignore
         result = await self.db.execute(stmt)
         shortened_url = result.scalars().first()

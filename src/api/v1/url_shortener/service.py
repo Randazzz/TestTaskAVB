@@ -23,7 +23,7 @@ class URLShortenerService:
         shortened_url_db = await self.url_shortener_repo.create(shortened_url)
         return shortened_url_db.short_key
 
-    async def get_by_short_id_or_raise(self, short_id):
+    async def get_by_short_id_or_raise(self, short_id) -> str:
         shortened_url = await self.url_shortener_repo.get_by_short_id_or_none(short_id)
         if shortened_url is None:
             raise HTTPException(
