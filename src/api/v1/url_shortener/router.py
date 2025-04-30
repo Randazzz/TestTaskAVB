@@ -1,9 +1,9 @@
 from fastapi import APIRouter, Depends, status
 from fastapi.responses import RedirectResponse
 
+from src.api.v1.dependecies import get_url_shortener_service
 from src.api.v1.url_shortener.schemas import ShortUrlResponse, URLRequest
 from src.api.v1.url_shortener.service import URLShortenerService
-from src.api.v1.dependecies import get_url_shortener_service
 
 router = APIRouter()
 
@@ -25,6 +25,7 @@ async def create_short_url(
 @router.get(
     "/{short_id}",
     status_code=status.HTTP_307_TEMPORARY_REDIRECT,
+    responses={404: {"description": "Short URL not found"}},
     summary="Redirect to original",
 )
 async def redirect_to_original(
