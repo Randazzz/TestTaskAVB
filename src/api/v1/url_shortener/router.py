@@ -1,9 +1,13 @@
+import logging
+
 from fastapi import APIRouter, Depends, status
 from fastapi.responses import RedirectResponse
 
 from src.api.v1.dependecies import get_url_shortener_service
 from src.api.v1.url_shortener.schemas import ShortUrlResponse, URLRequest
 from src.api.v1.url_shortener.service import URLShortenerService
+
+logger = logging.getLogger(__name__)
 
 router = APIRouter()
 
@@ -19,6 +23,7 @@ async def create_short_url(
     url_shortener_service: URLShortenerService = Depends(get_url_shortener_service),
 ):
     short_key = await url_shortener_service.create(data.url)
+    logger.info(f"Shortened url created for '{data.url}'")
     return {"short_url": f"http://127.0.0.1:8080/{short_key}"}
 
 

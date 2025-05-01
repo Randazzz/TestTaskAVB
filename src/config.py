@@ -1,3 +1,5 @@
+import logging
+
 from pydantic_settings import BaseSettings, SettingsConfigDict
 
 
@@ -9,6 +11,8 @@ class Settings(BaseSettings):
     DATABASE_USER: str
     DATABASE_PASSWORD: str
     DATABASE_NAME: str
+
+    LOG_LEVEL: str = "INFO"
 
     @property
     def get_database_url(self) -> str:
@@ -22,3 +26,16 @@ class Settings(BaseSettings):
 
 
 settings = Settings()
+
+
+def setup_logging():
+    log_level = getattr(logging, settings.LOG_LEVEL.upper(), logging.INFO)
+
+    logging.basicConfig(
+        filename="logging.log",
+        format="%(levelname)s (%(asctime)s): %(message)s (Line: %(lineno)d) [%(filename)s]",
+        datefmt="%d/%m/%Y %I:%M:%S",
+        filemode="a",
+        encoding="utf-8",
+        level=log_level,
+    )

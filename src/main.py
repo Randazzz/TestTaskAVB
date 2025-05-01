@@ -1,8 +1,14 @@
+import logging
+
 import uvicorn
 from fastapi import FastAPI
 
 from src.api.v1 import router as v1_router
-from src.config import settings
+from src.config import settings, setup_logging
+
+setup_logging()
+
+logger = logging.getLogger(__name__)
 
 app = FastAPI(debug=settings.DEBUG)
 
