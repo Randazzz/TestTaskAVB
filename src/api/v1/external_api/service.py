@@ -2,12 +2,7 @@ import logging
 
 import httpx
 from fastapi import HTTPException
-from pydantic import HttpUrl
 from sqlalchemy.ext.asyncio import AsyncSession
-from starlette import status
-
-from src.api.v1.url_shortener.models import ShortenedURL
-from src.api.v1.url_shortener.repository import URLShortenerRepository
 
 logger = logging.getLogger(__name__)
 
@@ -25,7 +20,4 @@ class ExternalAPIService:
                 return response.json()
         except httpx.HTTPError as e:
             logger.error(f"Failed to fetch cat fact: {e}")
-            raise HTTPException(
-                status_code=503,
-                detail=f"Failed to fetch cat fact"
-            )
+            raise HTTPException(status_code=503, detail=f"Failed to fetch cat fact")
