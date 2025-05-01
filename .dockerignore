@@ -1,0 +1,39 @@
+# Ignore Python virtual environment
+venv/
+
+# Ignore IDE-related files and folders
+.idea/
+
+# Ignore Python cache
+__pycache__/
+*.py[cod]
+*.pyd
+*.pyo
+
+# Ignore logs and temporary files
+*.log
+*.tmp
+*.bak
+
+# Ignore Git files
+.git/
+.gitignore
+.gitmodules
+
+# Ignore documentation and Markdown files
+*.md
+README.md
+LICENSE
+
+# Ignore build and distribution files
+dist/
+build/
+*.egg-info/
+*.egg
+*.whl
+
+# Ignore test data and folders
+tests/
+test/
+*.cover
+.coverage
