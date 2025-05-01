@@ -3,6 +3,7 @@ from typing import Callable, Type, TypeVar
 from fastapi import Depends
 from sqlalchemy.ext.asyncio import AsyncSession
 
+from src.api.v1.external_api.service import ExternalAPIService
 from src.api.v1.url_shortener.service import URLShortenerService
 from src.database import get_db
 
@@ -17,3 +18,4 @@ def get_service(service_class: Type[T]) -> Callable[[AsyncSession], T]:
 
 
 get_url_shortener_service = get_service(URLShortenerService)
+get_external_api_service = get_service(ExternalAPIService)
