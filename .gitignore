@@ -3,6 +3,7 @@ venv/
 .env
 .env.test
 .env.prod
+.env.example
 
 # Ignore IDE files
 .idea/
